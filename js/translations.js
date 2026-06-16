@@ -21,6 +21,8 @@ const TRANSLATIONS = {
         aboutHeader: "CYBER-HACK TYCOON",
         aboutDesc: "Ce système est un logiciel libre et indépendant. Pensez à soutenir le créateur sur Itch.io pour financer le développement de nouveaux virus !",
         aboutDonateBtn: "SOUTENIR LOIKH SUR ITCH.IO",
+        aboutResetBtn: "RÉINITIALISER LE SYSTÈME (WIPE)",
+        confirmReset: "⚠️ ATTENTION : Cette action va effacer définitivement toutes vos Lignes de Code, vos Crédits, vos améliorations de boutique, vos niveaux d'IA G.H.O.S.T. et votre progression de conquête. Voulez-vous vraiment purger le système et redémarrer à zéro ?",
         
         // Terminal Window
         terminalTitle: "~/terminal/code_exploit.sh",
@@ -35,7 +37,7 @@ const TRANSLATIONS = {
         // Darknet/Shop tabs
         tabExploits: "EXPLOITS & SCRIPTS",
         tabSecurity: "SÉCURITÉ & VPN",
-        tabConversion: "CONVERSION (LOC -> ฿)",
+        tabConversion: "VENTE (LOC ➔ ฿)",
         
         // Conversion panel
         convTitle: "Bureau d'Échange de Données",
@@ -62,22 +64,54 @@ const TRANSLATIONS = {
         feedBtn: "NOURRIR DE 1 000 LOC (EXP +1 000)",
         skillsHeader: "POUVOIRS SYNAPTIQUES DÉBLOQUÉS :",
         
-        // Tutorial Window
+        // Tutorial Window (Onboarding)
         tutorialTitle: "MANUEL_SYSTEME: Tutoriel_Sequence_Boot.md",
         tutorialHeader: "👁️ MANUEL D'INTRUSION CYBER_OS 👁️",
         tutorialSub: "Bienvenue opérateur. Lisez les directives de sécurité avant d'accéder aux sous-réseaux globaux.",
         step1Title: "1. COMPILATION ACTIVE (FRAPPES CLAVIER) :",
         step1Desc: "Cliquez sur 'INJECTER CODE' ou pressez N'IMPORTE QUELLE TOUCHE de votre clavier pour compiler des Lignes de Code (LoC) à toute vitesse.",
         step2Title: "2. MARCHÉ NOIR (AUTOMATISATION) :",
-        step2Desc: "Allez dans la boutique. Convertissez votre code LoC en Crédits (฿) pour acheter des bots et chevaux de Troie qui génèrent du code de manière autonome.",
+        step2Desc: "Allez dans la boutique. Convertissez votre code LoC en Crédits (฿) dans l'onglet 'VENTE' pour acheter des bots et logiciels offensifs.",
         step3Title: "3. EXPOSITION & LOGS (SÉCURITÉ) :",
-        step3Desc: "Les bots augmentent votre niveau de menace. À 100%, NetWatch bloque le système ! Utilisez la console Logs Cleaner ou achetez des VPN pour baisser la menace.",
-        step4Title: "4. MINI-JEUX DE BYPASS :",
-        step4Desc: "Toutes les 45-75s, une faille apparaît ! Cliquez sur l'éclair cyan et résolvez le puzzle en 15 secondes pour gagner une grosse somme de crédits.",
-        step5Title: "5. IA G.H.O.S.T. & CONQUÊTES (FIN DE PARTIE) :",
-        step5Desc: "Nourrissez votre IA de code LoC pour débloquer des pouvoirs actifs. Hachez les 5 serveurs boss mondiaux pour gagner la campagne !",
+        step3Desc: "Vos matériels offensifs augmentent votre niveau de menace. Gardez un profil bas ou purgez vos logs sous peine d'être bloqué par NetWatch !",
+        step4Title: "4. BRÈCHES DE DÉCRYPTAGE :",
+        step4Desc: "Plus tard, des failles apparaîtront ! Résolvez les puzzles sous 15 secondes pour obtenir de généreux virements de crédits.",
+        step5Title: "5. OBJECTIFS ULTIMES (FIN DE PARTIE) :",
+        step5Desc: "Débloquez l'IA G.H.O.S.T. et hackez les 5 serveurs mondiaux pour bend les limites du système et conquérir le réseau global !",
         bootBtn: "INITIALISER LA SÉQUENCE DE BOOT / ENTRER DANS LA MATRICE",
         
+        // Tutorial Window (Security Unlock)
+        secTutorialTitle: "MANUEL_SYSTEME: Securite_VPN.md",
+        secTutorialHeader: "⚠️ EXPOSITION TRACÉE ⚠️",
+        secTutorialSub: "NetWatch a intercepté la signature DNS de vos DDoS Botnets zombies !",
+        secStep1Title: "1. ALERTE EXPANSION :",
+        secStep1Desc: "Posséder des bots d'intrusion génère de l'exposition. Votre jauge de menace va désormais grimper naturellement chaque seconde.",
+        secStep2Title: "2. RISQUE DE CONFINEMENT (LOCKDOWN) :",
+        secStep2Desc: "Si votre jauge de menace atteint 100%, NetWatch bloque le système ! Vos bots sont gelés et la boutique est fermée d'urgence.",
+        secStep3Title: "3. NETTOYEUR DE LOGS ACTIF :",
+        secStep3Desc: "Utilisez la nouvelle fenêtre draggable 'clear_logs.sh' (cliquez ou tapez activement dedans) pour purger manuellement vos traces (-0.8% par frappe).",
+        secStep4Title: "4. BLINDAGE SÉCURITÉ PASSIF :",
+        secStep4Desc: "Achetez des Proxy Rotators et des Tor Bridges dans le nouvel onglet 'SÉCURITÉ & VPN' de la boutique pour baisser passivement la menace.",
+        secStep5Title: "5. CONTOURNEMENT DE PORTS :",
+        secStep5Desc: "Les alertes réseau actives sont désormais activées ! Cliquez sur l'éclair cyan dès qu'il apparaît pour injecter vos malwares sous 15s.",
+        secBootBtn: "ACTIVER LES CONTRE-MESURES DE SÉCURITÉ / PURGER LA CONSOLE",
+        
+        // Tutorial Window (G.H.O.S.T. Unlock)
+        ghostTutorialTitle: "MANUEL_SYSTEME: GHOST_AI_Core.md",
+        ghostTutorialHeader: "👾 PROJET G.H.O.S.T. INITIÉ 👾",
+        ghostTutorialSub: "L'intelligence artificielle évolutive et la campagne de domination sont en ligne.",
+        ghostStep1Title: "1. EXPÉRIENCE SYNAPTIQUE :",
+        ghostStep1Desc: "Cliquez sur 'NOURRIR' dans l'onglet G.H.O.S.T. pour sacrifier 1 000 LoC de code et faire grimper l'EXP de l'IA.",
+        ghostStep2Title: "2. POUVOIRS ACTIFS DÉBLOQUÉS :",
+        ghostStep2Desc: "Faire grimper le niveau de l'IA débloque de redoutables compétences actives (LoC x2 temporaire, effacement de menace à 0%, siphon de crédits).",
+        ghostStep3Title: "3. DOMINATION DES SERVEURS :",
+        ghostStep3Desc: "Infiltrez les 5 mainframes mondiaux (District Bank, Police Data...) lorsque vos bots atteignent les seuils requis.",
+        ghostStep4Title: "4. EFFETS PERMANENTS :",
+        ghostStep4Desc: "Chaque serveur piraté et contrôlé vous offre des modificateurs permanents (+15% crédits, -20% coûts VPN, jauge de menace à 120%).",
+        ghostStep5Title: "5. L'ENDGAME ULTIME :",
+        ghostStep5Desc: "Infiltrez le 5ème serveur (Supercalculateur d'Apex) pour faire chuter les mégacorporations et asseoir votre suprématie sur le globe !",
+        ghostBootBtn: "INTÉGRER LA CONFIGURATION DE L'IA / CONQUÉRIR LE CODESPACE",
+
         // Cleaner Window
         cleanerTitle: "~/terminal/clear_logs.sh",
         cleanerExposure: "VECTEUR D'EXPOSITION DE TRACE :",
@@ -158,6 +192,8 @@ const TRANSLATIONS = {
         aboutHeader: "CYBER-HACK TYCOON",
         aboutDesc: "This system is free, independent software. Please consider supporting the creator on Itch.io to fund next-gen cybersecurity subnets.",
         aboutDonateBtn: "SUPPORT LOIKH ON ITCH.IO",
+        aboutResetBtn: "WIPE SYSTEM DATA (RESET)",
+        confirmReset: "⚠️ WARNING: This action will permanently delete all your Lines of Code, Credits, shop upgrades, G.H.O.S.T. AI levels, and conquest progress. Do you really want to purge the system and reboot from scratch?",
         
         // Terminal Window
         terminalTitle: "~/terminal/main_exploit.sh",
@@ -172,7 +208,7 @@ const TRANSLATIONS = {
         // Darknet/Shop tabs
         tabExploits: "EXPLOITS & SCRIPTS",
         tabSecurity: "SECURITY & VPN",
-        tabConversion: "CONVERSION (LOC -> ฿)",
+        tabConversion: "SELL (LOC ➔ ฿)",
         
         // Conversion panel
         convTitle: "Data Exchange Bureau",
@@ -199,7 +235,7 @@ const TRANSLATIONS = {
         feedBtn: "FEED 1,000 LOC TO CORE (EXP +1,000)",
         skillsHeader: "UNLOCKED SYNAPTIC POWERS:",
         
-        // Tutorial Window
+        // Tutorial Window (Onboarding)
         tutorialTitle: "SYSTEM_MANUAL: Boot_Sequence_Tutorial.md",
         tutorialHeader: "👁️ CYBER_OS INTRUDER MANUAL 👁️",
         tutorialSub: "Welcome operator. Read security directives before accessing global subnets.",
@@ -208,13 +244,45 @@ const TRANSLATIONS = {
         step2Title: "2. DARKNET BLACK MARKET (AUTOMATION) :",
         step2Desc: "Go to the Black Market shop. Convert your LoC code into crypto Credits (฿) in the conversion tab, then purchase bots and trojans to generate code automatically.",
         step3Title: "3. EXPOSURE & LOG SCRUBBING (SECURITY) :",
-        step3Desc: "Active bots leak traces and creep up your Threat Level. If threat hits 100%, NetWatch triggers a lockdown! Use the Logs Cleaner window (click or type inside it) or buy VPN upgrades to keep the profile low.",
-        step4Title: "4. BYPASS INTRUSION MINI-GAMES :",
-        step4Desc: "Every 45-75s, a vulnerability appears! Click the floating lightning button and solve the hex matching puzzle in 15 seconds to gain a massive credits payout.",
-        step5Title: "5. G.H.O.S.T. AI & CONQUEST (ENDGAME) :",
-        step5Desc: "Feed code to your AI core to unlock powers (Overclocking, Blackout, Cash siphons). Hack the 5 global target mainframes to permanently bend system limits and win the campaign!",
+        step3Desc: "Active bots leak traces and creep up your Threat Level. Manage exposure closely or NetWatch will trace and capture your server gateways!",
+        step4Title: "4. BYPASS PORT INTRUSIONS :",
+        step4Desc: "Active vulnerabilities will spawn in the future! Solve the hex matching puzzles under 15 seconds to gain massive credit payouts.",
+        step5Title: "5. ULTIMATE OBJECTIVES (ENDGAME) :",
+        step5Desc: "Unlock G.H.O.S.T. AI, feed it code to unlock active powers, and hack the 5 global servers to permanently bend system limits and win!",
         bootBtn: "INITIALIZE BOOT SEQUENCE / ENTER MATRIX",
         
+        // Tutorial Window (Security Unlock)
+        secTutorialTitle: "SYSTEM_MANUAL: Security_VPN.md",
+        secTutorialHeader: "⚠️ EXPOSURE TRACED ⚠️",
+        secTutorialSub: "NetWatch has intercepted your zombie DDoS Botnet network dns signatures!",
+        secStep1Title: "1. EXPOSURE CREEP :",
+        secStep1Desc: "Possessing offensive bot networks leaks tracking metadata. Your Threat Level jauge will now creep up naturally every second.",
+        secStep2Title: "2. SYSTEM LOCKDOWN THREAT :",
+        secStep2Desc: "If threat hits 100%, NetWatch triggers a lockdown! Server gateways are seized, active bots are frozen, and darknet shop transactions are blocked.",
+        secStep3Title: "3. ACTIVE LOGS CLEANER :",
+        secStep3Desc: "Use the new draggable 'clear_logs.sh' window (click or type inside it) to manually purge tracking logs (-0.8% trace per keystroke).",
+        secStep4Title: "4. PASSIVE VPN SHIELDING :",
+        secStep4Desc: "Purchase Proxy Node Rotators and Tor Bridges in the new 'SECURITY & VPN' shop tab to passively deflect traces and lower threat.",
+        secStep5Title: "5. ACTIVE PORT BYPASSES :",
+        secStep5Desc: "Port alerts are now online! Click the cyan flash lightning widget as soon as it appears to decrypt server vectors under 15 seconds.",
+        secBootBtn: "ACTIVATE SECURITY COUNTER-MEASURES / PURGE CONSOLE",
+        
+        // Tutorial Window (G.H.O.S.T. Unlock)
+        ghostTutorialTitle: "SYSTEM_MANUAL: GHOST_AI_Core.md",
+        ghostTutorialHeader: "👾 PROJECT G.H.O.S.T. INITIALIZED 👾",
+        ghostTutorialSub: "The evolutionary artificial intelligence core and mainframe campaign dashboard are online.",
+        ghostStep1Title: "1. SYNAPTIC EXPERIENCE :",
+        ghostStep1Desc: "Click 'FEED' inside the G.H.O.S.T. tab to sacrifice 1,000 LoC to expand G.H.O.S.T. AI experience and level up core synapses.",
+        ghostStep2Title: "2. ACTIVE SYNAPTIC POWERS :",
+        ghostStep2Desc: "Leveling up unlocks surpuissants active skills with cooldown timers (compiling multipliers, trace resets, international bank siphons).",
+        ghostStep3Title: "3. MAINFRAME DOMINATION :",
+        ghostStep3Desc: "Hack 5 secure global servers (Central Bank, Police Server...) once your active offensive bots hit the required infrastructure thresholds.",
+        ghostStep4Title: "4. GLOBAL REWARDS :",
+        ghostStep4Desc: "Each controlled server node provides permanent global system buffs (credits multipliers, VPN discounts, threat exposure cushions).",
+        ghostStep5Title: "5. THE ENDGAME MAIN :",
+        ghostStep5Desc: "Launch attack on the 5th server (Apex Central Supercomputer) to crash the corporate overlords and conquer the global codespace!",
+        ghostBootBtn: "INTEGRATE AI SYNAPSE PROTOCOLS / SEIZE GLOBAL GRID",
+
         // Cleaner Window
         cleanerTitle: "~/terminal/clear_logs.sh",
         cleanerExposure: "TRACE EXPOSURE VECTOR:",

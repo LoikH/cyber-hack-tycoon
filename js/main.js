@@ -76,17 +76,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Check if onboarding tutorial is needed
     if (!state.tutorialRead) {
-        ui.winTutorial.style.display = "flex";
-        ui.focusWindow(ui.winTutorial);
+        ui.showTutorialPopup("onboarding", state, () => {
+            state.tutorialRead = true;
+            state.save();
+            
+            // Re-apply language which dynamically reveals the terminal and shop windows!
+            ui.applyLanguage(state, gameTimer);
+            ui.updateStats(state);
+            ui.renderShop(state, buyUpgrade);
+            
+            ui.showNotification("DECRYPTING INTERFACE", "Establishing deep web gateway. Good luck, operator.", "success");
+            
+            // Instantly check and trigger the starting Cipher narrative email handshake!
+            story.checkTriggers(state);
+        });
     }
-
-    // Bind onboarding tutorial close button
-    ui.tutorialCloseBtn.addEventListener("click", () => {
-        ui.winTutorial.style.display = "none";
-        state.tutorialRead = true;
-        state.save();
-        ui.showNotification("DECRYPTING INTERFACE", "Establishing deep web gateway. Good luck, operator.", "success");
-    });
 
     // Check lockdown visual state on boot
     const statusBar = document.querySelector(".status-bar");
@@ -242,6 +246,20 @@ document.addEventListener("DOMContentLoaded", () => {
             
             ui.showNotification("SOFTWARE INSTALLED", `${item.name} v${owned + 1} activated.`, "success");
             
+            // Progressive Disclosure: Unlock Security / clear_logs after first DDoS Bot purchase!
+            if (itemId === "ddos_bot" && !state.isSecurityUnlocked) {
+                state.isSecurityUnlocked = true;
+                state.save();
+                
+                // Re-apply language which dynamically reveals clear_logs window and security shop tab!
+                ui.applyLanguage(state, gameTimer);
+                
+                // Trigger Security campaign tutorial popup!
+                ui.showTutorialPopup("security", state, () => {
+                    ui.showNotification("SECURITY SYSTEMS ENGAGED", "clear_logs.sh and VPN Darknet nodes activated.", "success");
+                });
+            }
+            
             ui.updateStats(state);
             ui.renderShop(state, buyUpgrade);
             ui.renderConquestNodes(state, attackNode);
@@ -319,8 +337,25 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("story-choice", (e) => {
         const { eventId, choiceIndex } = e.detail;
         story.resolveChoice(state, eventId, choiceIndex);
-        ui.updateStats(state);
-        ui.renderShop(state, buyUpgrade);
+        
+        // Progressive Disclosure: Unlock G.H.O.S.T. window after their first narrative action choice!
+        if (!state.isGhostUnlocked) {
+            state.isGhostUnlocked = true;
+            state.save();
+            
+            // Re-apply language which dynamically reveals win-ghost on the desktop!
+            ui.applyLanguage(state, gameTimer);
+            ui.renderConquestNodes(state, attackNode);
+            ui.renderAiCore(state, activeCooldowns, activateSkillPower);
+            
+            // Trigger G.H.O.S.T. / Conquest campaign tutorial popup!
+            ui.showTutorialPopup("ghost", state, () => {
+                ui.showNotification("G.H.O.S.T. IA CORE ONLINE", "Project G.H.O.S.T. and Conquest Dashboard activated.", "success");
+            });
+        } else {
+            ui.updateStats(state);
+            ui.renderShop(state, buyUpgrade);
+        }
     });
 
     // --- ABOUT & SUPPORT BUTTONS LISTENERS ---
@@ -341,11 +376,21 @@ document.addEventListener("DOMContentLoaded", () => {
         window.open("https://loikh.itch.io/cyber-hack-tycoon", "_blank");
     });
 
+    ui.aboutResetBtn.addEventListener("click", () => {
+        const lang = state.language || "en";
+        const dict = TRANSLATIONS[lang] || TRANSLATIONS["en"];
+
+        if (confirm(dict.confirmReset)) {
+            state.clearSave();
+            window.location.reload(); // reboot page cleanly
+        }
+    });
+
     // --- DECRYPTION INTRUSION MINI-GAME LOGIC ---
 
     // Trigger floating vulnerability alert
     function triggerVulnerability() {
-        if (state.isLockdown || intrusionActive || vulnAlertActive) return;
+        if (!state.isSecurityUnlocked || state.isLockdown || intrusionActive || vulnAlertActive) return;
 
         vulnAlertActive = true;
         vulnTimer = 15; // 15s to click it
@@ -593,7 +638,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let autoSaveTimer = 0;
     setInterval(() => {
         // --- RANDOM PORT VULNERABILITY SPAWNER ---
-        if (!state.isLockdown && !intrusionActive && !vulnAlertActive) {
+        if (state.isSecurityUnlocked && !state.isLockdown && !intrusionActive && !vulnAlertActive) {
             spawnTimer++;
             if (spawnTimer >= nextSpawnThreshold) {
                 spawnTimer = 0;

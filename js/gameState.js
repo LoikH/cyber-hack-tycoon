@@ -28,6 +28,10 @@ class GameState {
 
         // Onboarding Tutorial
         this.tutorialRead = false;
+        
+        // Progressive Disclosure Unlock Flags
+        this.isSecurityUnlocked = false;
+        this.isGhostUnlocked = false;
 
         // Lockdown State
         this.isLockdown = false;
@@ -73,6 +77,8 @@ class GameState {
             isLockdown: this.isLockdown,
             lockdownProgress: this.lockdownProgress,
             tutorialRead: this.tutorialRead,
+            isSecurityUnlocked: this.isSecurityUnlocked,
+            isGhostUnlocked: this.isGhostUnlocked,
             language: this.language,
             aiLevel: this.aiLevel,
             aiExp: this.aiExp,
@@ -102,6 +108,8 @@ class GameState {
                 this.isLockdown = typeof data.isLockdown === 'boolean' ? data.isLockdown : false;
                 this.lockdownProgress = typeof data.lockdownProgress === 'number' ? data.lockdownProgress : 0;
                 this.tutorialRead = typeof data.tutorialRead === 'boolean' ? data.tutorialRead : false;
+                this.isSecurityUnlocked = typeof data.isSecurityUnlocked === 'boolean' ? data.isSecurityUnlocked : false;
+                this.isGhostUnlocked = typeof data.isGhostUnlocked === 'boolean' ? data.isGhostUnlocked : false;
                 
                 const userLang = navigator.language || navigator.userLanguage || "en";
                 this.language = data.language || (userLang.startsWith("fr") ? "fr" : "en");

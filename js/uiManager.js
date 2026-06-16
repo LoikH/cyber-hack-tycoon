@@ -149,6 +149,7 @@ class UiManager {
         this.winAbout = document.getElementById("win-about");
         this.winAboutClose = document.getElementById("win-about-close");
         this.aboutDonateBtn = document.getElementById("about-donate-btn");
+        this.aboutResetBtn = document.getElementById("about-reset-btn");
     }
 
     // Initialize drag & drop for desktop windows
@@ -728,6 +729,7 @@ class UiManager {
         document.querySelector("#win-about h3").innerText = dict.aboutHeader;
         document.querySelector("#win-about p:nth-of-type(4)").innerText = dict.aboutDesc;
         this.aboutDonateBtn.querySelector(".hack-btn-text").innerText = dict.aboutDonateBtn;
+        this.aboutResetBtn.querySelector(".hack-btn-text").innerText = dict.aboutResetBtn;
 
         // 1. Status Bar
         document.querySelector(".logo").innerText = dict.logo;
@@ -833,5 +835,103 @@ class UiManager {
 
         // Float Alert Widget
         document.querySelector("#vuln-alert-widget .vuln-alert-text").innerText = dict.vulnAlertText;
+
+        // --- PROGRESSIVE DISCLOSURE WINDOWS VISIBILITY CONTROL ---
+        const terminalWin = document.getElementById("win-terminal");
+        const shopWin = document.getElementById("win-shop");
+
+        if (!state.tutorialRead) {
+            terminalWin.style.display = "none";
+            shopWin.style.display = "none";
+            this.winClearLogs.style.display = "none";
+            this.winGhost.style.display = "none";
+            // Make sure Commlink is open
+            document.getElementById("win-commlink").style.display = "flex";
+        } else {
+            terminalWin.style.display = "flex";
+            shopWin.style.display = "flex";
+            this.winClearLogs.style.display = state.isSecurityUnlocked ? "flex" : "none";
+            this.winGhost.style.display = state.isGhostUnlocked ? "flex" : "none";
+        }
+
+        // Hide/show shop security tab dynamically
+        tabs[1].style.display = state.isSecurityUnlocked ? "inline-block" : "none";
+    }
+
+    // Displays the tutorial window with custom dynamic content
+    showTutorialPopup(type, state, onConfirmCallback) {
+        const lang = state.language || "en";
+        const dict = TRANSLATIONS[lang] || TRANSLATIONS["en"];
+
+        let titleKey, headerKey, subKey, s1tKey, s1dKey, s2tKey, s2dKey, s3tKey, s3dKey, s4tKey, s4dKey, s5tKey, s5dKey, btnKey;
+
+        if (type === "security") {
+            titleKey = "secTutorialTitle";
+            headerKey = "secTutorialHeader";
+            subKey = "secTutorialSub";
+            s1tKey = "secStep1Title"; s1dKey = "secStep1Desc";
+            s2tKey = "secStep2Title"; s2dKey = "secStep2Desc";
+            s3tKey = "secStep3Title"; s3dKey = "secStep3Desc";
+            s4tKey = "secStep4Title"; s4dKey = "secStep4Desc";
+            s5tKey = "secStep5Title"; s5dKey = "secStep5Desc";
+            btnKey = "secBootBtn";
+        } else if (type === "ghost") {
+            titleKey = "ghostTutorialTitle";
+            headerKey = "ghostTutorialHeader";
+            subKey = "ghostTutorialSub";
+            s1tKey = "ghostStep1Title"; s1dKey = "ghostStep1Desc";
+            s2tKey = "ghostStep2Title"; s2dKey = "ghostStep2Desc";
+            s3tKey = "ghostStep3Title"; s3dKey = "ghostStep3Desc";
+            s4tKey = "ghostStep4Title"; s4dKey = "ghostStep4Desc";
+            s5tKey = "ghostStep5Title"; s5dKey = "ghostStep5Desc";
+            btnKey = "ghostBootBtn";
+        } else {
+            // Default onboarding
+            titleKey = "tutorialTitle";
+            headerKey = "tutorialHeader";
+            subKey = "tutorialSub";
+            s1tKey = "step1Title"; s1dKey = "step1Desc";
+            s2tKey = "step2Title"; s2dKey = "step2Desc";
+            s3tKey = "step3Title"; s3dKey = "step3Desc";
+            s4tKey = "step4Title"; s4dKey = "step4Desc";
+            s5tKey = "step5Title"; s5dKey = "step5Desc";
+            btnKey = "bootBtn";
+        }
+
+        // Apply content to win-tutorial
+        document.querySelector("#win-tutorial .window-title").innerText = dict[titleKey];
+        document.querySelector(".tutorial-logo h2").innerText = dict[headerKey];
+        document.querySelector(".tutorial-logo h2").setAttribute("data-text", dict[headerKey]);
+        
+        // Include architect credit only for onboarding type
+        if (type === "onboarding" || type === "default" || type === undefined) {
+            document.querySelector(".tutorial-logo div").innerHTML = `System Architect: <strong style="color: var(--neon-green); text-shadow: var(--glow-green);">LoikH</strong> | ${dict[subKey]}`;
+        } else {
+            document.querySelector(".tutorial-logo div").innerText = dict[subKey];
+        }
+
+        const steps = document.querySelectorAll(".tutorial-scroll-box div");
+        steps[0].innerHTML = `<strong style="color: var(--neon-cyan); text-shadow: var(--glow-cyan);">${dict[s1tKey]}</strong><br>${dict[s1dKey]}`;
+        steps[1].innerHTML = `<strong style="color: var(--neon-cyan); text-shadow: var(--glow-cyan);">${dict[s2tKey]}</strong><br>${dict[s2dKey]}`;
+        steps[2].innerHTML = `<strong style="color: var(--neon-cyan); text-shadow: var(--glow-cyan);">${dict[s3tKey]}</strong><br>${dict[s3dKey]}`;
+        steps[3].innerHTML = `<strong style="color: var(--neon-cyan); text-shadow: var(--glow-cyan);">${dict[s4tKey]}</strong><br>${dict[s4dKey]}`;
+        steps[4].innerHTML = `<strong style="color: var(--neon-cyan); text-shadow: var(--glow-cyan);">${dict[s5tKey]}</strong><br>${dict[s5dKey]}`;
+        this.tutorialCloseBtn.querySelector(".hack-btn-text").innerText = dict[btnKey];
+
+        // Open the tutorial window and focus it
+        this.winTutorial.style.display = "flex";
+        this.focusWindow(this.winTutorial);
+
+        // Bind the close button event dynamically (using cloneNode to prune previous listener bindings!)
+        const newCloseBtn = this.tutorialCloseBtn.cloneNode(true);
+        this.tutorialCloseBtn.parentNode.replaceChild(newCloseBtn, this.tutorialCloseBtn);
+        this.tutorialCloseBtn = newCloseBtn;
+
+        this.tutorialCloseBtn.addEventListener("click", () => {
+            this.winTutorial.style.display = "none";
+            if (onConfirmCallback) {
+                onConfirmCallback();
+            }
+        });
     }
 }
