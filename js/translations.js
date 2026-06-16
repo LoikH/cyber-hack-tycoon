@@ -126,8 +126,13 @@ const TRANSLATIONS = {
         // Decryption Intrusion Window
         intrusionTitle: "~/darknet/bypass_injector.sh",
         intrusionHeader: "⚠️ VECTEUR SÉCURISÉ LOCALISÉ ⚠️",
-        intrusionSub: "FAITES CORRESPONDRE LES CODES POUR DÉCRYPTER :",
+        intrusionSub: "Synchronisez le signal pour bypasser le firewall.",
         intrusionFooter: "Temps restant : ",
+        
+        // Achievements & Audio UI
+        achievementsBtn: "SUCCÈS",
+        audioVolOn: "VOL: ON",
+        audioVolOff: "VOL: OFF",
         
         // Notifications & Banners
         accessGranted: "ACCÈS AUTORISÉ",
@@ -297,8 +302,13 @@ const TRANSLATIONS = {
         // Decryption Intrusion Window
         intrusionTitle: "~/darknet/bypass_injector.sh",
         intrusionHeader: "⚠️ SECURE VECTOR LOCATED ⚠️",
-        intrusionSub: "MATCH CODES TO DECRYPT PORT ROUTE :",
+        intrusionSub: "Sync the signal to bypass the firewall.",
         intrusionFooter: "Time remaining: ",
+        
+        // Achievements & Audio UI
+        achievementsBtn: "ACHIEVEMENTS",
+        audioVolOn: "VOL: ON",
+        audioVolOff: "VOL: OFF",
         
         // Notifications & Banners
         accessGranted: "ACCESS GRANTED",

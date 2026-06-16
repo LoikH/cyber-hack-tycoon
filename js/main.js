@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const state = new GameState();
     const ui = new UiManager();
     const story = new StoryEngine(ui);
+    const audio = new AudioManager();
 
     // --- COOLDOWNS & ACTIVE SKILL BUFFS STATE ---
     const activeCooldowns = {
@@ -20,11 +21,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- DECRYPTION INTRUSION MINI-GAME VARIABLES ---
     let intrusionActive = false;
+    let intrusionType = "hex"; // "hex", "simon", "brute"
     let vulnAlertActive = false;
     let vulnTimer = 0;
     let gameTimer = 15;
     let gameTargetHex = "";
     let gameOptions = [];
+    let simonSequence = [];
+    let simonPlayerSequence = [];
+    let bruteTargetRange = { min: 40, max: 60 };
+    let bruteCurrentPos = 0;
+    let bruteDirection = 1;
     let spawnTimer = 0;
     // Spawn a vulnerability every 45 to 75 seconds randomly
     let nextSpawnThreshold = Math.floor(Math.random() * 30) + 45; 
@@ -39,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Recalculate and render initial UI
     state.recalculateRates();
-    ui.applyLanguage(state, gameTimer); // Translate static elements first
+    ui.applyLanguage(state, audio, gameTimer); // Translate static elements first
     ui.updateStats(state);
     ui.renderShop(state, buyUpgrade);
     ui.renderConquestNodes(state, attackNode);
@@ -52,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
         state.recalculateRates();
         state.save();
 
-        ui.applyLanguage(state, gameTimer);
+        ui.applyLanguage(state, audio, gameTimer);
         ui.updateStats(state);
         ui.renderShop(state, buyUpgrade);
         ui.renderConquestNodes(state, attackNode);
@@ -81,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
             state.save();
             
             // Re-apply language which dynamically reveals the terminal and shop windows!
-            ui.applyLanguage(state, gameTimer);
+            ui.applyLanguage(state, audio, gameTimer);
             ui.updateStats(state);
             ui.renderShop(state, buyUpgrade);
             
@@ -115,7 +122,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // 3. Game Clicker / Typist actions
+    function checkAchievements() {
+        ACHIEVEMENTS_DATA.forEach(ach => {
+            if (!state.unlockedAchievements.includes(ach.id)) {
+                if (ach.criteria(state)) {
+                    state.unlockedAchievements.push(ach.id);
+                    const lang = state.language || "en";
+                    const data = ach[lang] || ach["en"];
+                    ui.showNotification("ACHIEVEMENT UNLOCKED", `${ach.icon} ${data.name}`, "success");
+                    audio.playSuccess();
+                    state.save();
+                    if (ui.achievementsWin.style.display === "flex") {
+                        ui.renderAchievements(state);
+                    }
+                }
+            }
+        });
+    }
+
     function performHack() {
+        audio.init();
+        audio.playKeyPress();
+
         if (state.isLockdown) {
             // Under lockdown, clicks/keystrokes scrub logs instead of generating code
             state.lockdownProgress += 1;
@@ -135,11 +163,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 ui.showNotification("SYS_CLEARED", "Emergency log scrub COMPLETE. Safe state restored.", "success");
                 ui.showNotification("NET_ONLINE", "VPN proxy tunnels rebuilt. Darknet access online.", "info");
+                audio.playSuccess();
             }
             
             ui.updateStats(state);
             ui.renderShop(state, buyUpgrade);
             state.save();
+            checkAchievements();
             return;
         }
 
@@ -162,11 +192,15 @@ document.addEventListener("DOMContentLoaded", () => {
         // Re-render shop and dashboards as resources grow
         ui.renderShop(state, buyUpgrade);
         ui.renderAiCore(state, activeCooldowns, activateSkillPower);
+        checkAchievements();
     }
 
     // Active manual log scrubbing action
     function performLogScrub() {
         if (state.isLockdown) return; // Scrubbing window disabled under lockdown
+
+        audio.init();
+        audio.playKeyPress();
 
         if (state.threatPercent <= 0) {
             ui.showNotification("SECURITY STATUS", "Subnet trace is already empty.", "info");
@@ -182,7 +216,26 @@ document.addEventListener("DOMContentLoaded", () => {
         ui.updateStats(state);
         ui.renderShop(state, buyUpgrade);
         state.save();
+        checkAchievements();
     }
+
+    // --- ACHIEVEMENTS & AUDIO UI BINDINGS ---
+    ui.achievementsBtn.addEventListener("click", () => {
+        ui.renderAchievements(state);
+        ui.achievementsWin.style.display = "flex";
+        ui.focusWindow(ui.achievementsWin);
+    });
+
+    ui.achievementsClose.addEventListener("click", () => {
+        ui.achievementsWin.style.display = "none";
+    });
+
+    ui.audioToggleBtn.addEventListener("click", () => {
+        audio.init();
+        const isEnabled = audio.toggle();
+        ui.audioToggleBtn.innerText = isEnabled ? "VOL: ON" : "VOL: OFF";
+        ui.audioToggleBtn.style.color = isEnabled ? "var(--neon-green)" : "var(--text-muted)";
+    });
 
     // Button click exploit injection
     ui.hackBtn.addEventListener("click", (e) => {
@@ -255,7 +308,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 state.save();
                 
                 // Re-apply language which dynamically reveals clear_logs window and security shop tab!
-                ui.applyLanguage(state, gameTimer);
+                ui.applyLanguage(state, audio, gameTimer);
                 
                 // Real-time mobile navigation bar updates
                 updateMobileNavBar();
@@ -351,7 +404,7 @@ document.addEventListener("DOMContentLoaded", () => {
             state.save();
             
             // Re-apply language which dynamically reveals win-ghost on the desktop!
-            ui.applyLanguage(state, gameTimer);
+            ui.applyLanguage(state, audio, gameTimer);
             ui.renderConquestNodes(state, attackNode);
             ui.renderAiCore(state, activeCooldowns, activateSkillPower);
             
@@ -492,44 +545,99 @@ document.addEventListener("DOMContentLoaded", () => {
         ui.winIntrusion.style.display = "flex";
         ui.focusWindow(ui.winIntrusion);
 
-        // Generate decryption puzzle (8 options, 1 correct target)
-        const shuffled = [...HEX_POOL].sort(() => 0.5 - Math.random());
-        gameOptions = shuffled.slice(0, 8);
-        gameTargetHex = gameOptions[Math.floor(Math.random() * gameOptions.length)];
+        // Randomize intrusion type
+        const types = ["hex", "simon", "brute"];
+        intrusionType = types[Math.floor(Math.random() * types.length)];
 
-        ui.renderIntrusionPuzzle(gameTargetHex, gameOptions, verifyIntrusionChoice);
+        if (intrusionType === "hex") {
+            // Generate decryption puzzle (8 options, 1 correct target)
+            const shuffled = [...HEX_POOL].sort(() => 0.5 - Math.random());
+            gameOptions = shuffled.slice(0, 8);
+            gameTargetHex = gameOptions[Math.floor(Math.random() * gameOptions.length)];
+            ui.renderIntrusionPuzzle(gameTargetHex, gameOptions, verifyIntrusionChoice);
+        } else if (intrusionType === "simon") {
+            // Simon Memory
+            simonSequence = Array.from({ length: 4 }, () => Math.floor(Math.random() * 4));
+            simonPlayerSequence = [];
+            ui.renderSimonPuzzle(simonSequence, handleSimonInput);
+        } else if (intrusionType === "brute") {
+            // Brute Force Timing
+            bruteCurrentPos = 0;
+            bruteDirection = 1;
+            const targetSize = 15;
+            const targetMin = Math.floor(Math.random() * (100 - targetSize));
+            bruteTargetRange = { min: targetMin, max: targetMin + targetSize };
+            ui.renderBrutePuzzle(bruteTargetRange, verifyBruteForce);
+        }
+
         ui.intrusionTimerTxt.innerText = `Time remaining: ${gameTimer}s`;
         ui.intrusionProgress.style.width = "100%";
     });
 
+    function handleSimonInput(index) {
+        if (!intrusionActive || intrusionType !== "simon") return;
+        simonPlayerSequence.push(index);
+        audio.playNote(400 + index * 100, 0, 0.1, 'sine');
+
+        const currentStep = simonPlayerSequence.length - 1;
+        if (simonPlayerSequence[currentStep] !== simonSequence[currentStep]) {
+            // Error
+            gameTimer = Math.max(0, gameTimer - 3);
+            simonPlayerSequence = [];
+            ui.showNotification("BUFFER MISMATCH", "Memory sequence failed! Resetting...", "alert");
+            audio.playFailure();
+            // Fullscreen red flash
+            ui.screenFeedback.className = "feedback-overlay error-flash";
+            setTimeout(() => { ui.screenFeedback.className = "feedback-overlay"; }, 300);
+        } else if (simonPlayerSequence.length === simonSequence.length) {
+            handleIntrusionSuccess();
+        }
+    }
+
+    function verifyBruteForce() {
+        if (!intrusionActive || intrusionType !== "brute") return;
+        if (bruteCurrentPos >= bruteTargetRange.min && bruteCurrentPos <= bruteTargetRange.max) {
+            handleIntrusionSuccess();
+        } else {
+            gameTimer = Math.max(0, gameTimer - 4);
+            ui.showNotification("INJECTION FAILED", "Timing offset! -4s penalty.", "alert");
+            audio.playFailure();
+            ui.screenFeedback.className = "feedback-overlay error-flash";
+            setTimeout(() => { ui.screenFeedback.className = "feedback-overlay"; }, 300);
+        }
+    }
+
+    function handleIntrusionSuccess() {
+        intrusionActive = false;
+        ui.winIntrusion.style.display = "none";
+        audio.playSuccess();
+
+        // Reward scales slightly with game stage
+        const ddosFactor = state.upgrades.ddos_bot || 0;
+        const rootkitFactor = state.upgrades.rootkit || 0;
+        const randomBonus = Math.floor(Math.random() * 50) + 30; 
+        const reward = Number((randomBonus + ddosFactor * 2.5 + rootkitFactor * 15.0).toFixed(2));
+
+        state.credits += reward;
+        state.totalCreditsEarned += reward;
+        state.stats.breachesWon += 1;
+        state.save();
+
+        ui.updateStats(state);
+        ui.renderShop(state, buyUpgrade);
+        ui.showNotification("INTRUSION SUCCESS", `Bypass completed! Gained ฿${reward.toFixed(2)} darknet credits.`, "success");
+        ui.triggerScreenFeedback("success", "ACCESS GRANTED", `Port cracked (+฿${reward.toFixed(2)} CR)`);
+        
+        story.checkTriggers(state);
+        checkAchievements();
+    }
+
     // Handle option click in the puzzle grid
     function verifyIntrusionChoice(selectedCode, buttonEl) {
-        if (!intrusionActive) return;
+        if (!intrusionActive || intrusionType !== "hex") return;
 
         if (selectedCode === gameTargetHex) {
-            // SUCCESS!
-            intrusionActive = false;
-            ui.winIntrusion.style.display = "none";
-
-            // Reward scales slightly with game stage (DDoS and Rootkits owned)
-            const ddosFactor = state.upgrades.ddos_bot || 0;
-            const rootkitFactor = state.upgrades.rootkit || 0;
-            const randomBonus = Math.floor(Math.random() * 50) + 30; // 30 - 80 credits base
-            const reward = Number((randomBonus + ddosFactor * 2.5 + rootkitFactor * 15.0).toFixed(2));
-
-            state.credits += reward;
-            state.totalCreditsEarned += reward;
-            state.save();
-
-            ui.updateStats(state);
-            ui.renderShop(state, buyUpgrade);
-            ui.showNotification("INTRUSION SUCCESS", `Bypass completed! Gained ฿${reward.toFixed(2)} darknet credits.`, "success");
-            
-            // Giant cinematic center-screen feedback & flash
-            ui.triggerScreenFeedback("success", "ACCESS GRANTED", `Port cracked (+฿${reward.toFixed(2)} CR)`);
-            
-            // Check story triggers since credits increased
-            story.checkTriggers(state);
+            handleIntrusionSuccess();
         } else {
             // WRONG CHOICE: Deplete time by 3 seconds as a trace penalty
             gameTimer = Math.max(0, gameTimer - 3);
@@ -548,6 +656,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 ui.screenFeedback.className = "feedback-overlay";
             }, 300);
 
+            audio.playFailure();
             ui.showNotification("INTRUSION PENALTY", "Encryption sector mismatch! -3s trace penalty.", "alert");
 
             // Check if timer reached 0 from penalty
@@ -561,6 +670,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function handleIntrusionFailure() {
         intrusionActive = false;
         ui.winIntrusion.style.display = "none";
+        audio.playFailure();
 
         // Netwatch traces firewall intrusion and spikes threat percent by 15%
         state.threatPercent = Math.min(100, state.threatPercent + 15);
@@ -741,6 +851,14 @@ document.addEventListener("DOMContentLoaded", () => {
         // --- ACTIVE INTRUSION GAME COUNTDOWN ---
         if (intrusionActive) {
             gameTimer--;
+
+            if (intrusionType === "brute") {
+                // Brute Force slider logic
+                bruteCurrentPos += 5 * bruteDirection;
+                if (bruteCurrentPos >= 100 || bruteCurrentPos <= 0) bruteDirection *= -1;
+                ui.updateBruteSlider(bruteCurrentPos);
+            }
+
             if (gameTimer <= 0) {
                 gameTimer = 0;
                 handleIntrusionFailure();
@@ -797,6 +915,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     
                     ui.showNotification("CRITICAL SEIZURE", "NetWatch tracers have located your server grid!", "alert");
                     ui.showNotification("LOCKDOWN RECOVERY", "Scrub logs in the terminal to evaporate trace routes!", "warning");
+                    audio.playAlert();
                     
                     // If a mini-game alert was active, close it
                     if (vulnAlertActive) {

@@ -45,6 +45,8 @@
                 </div>
             </div>
             <div class="status-right">
+                <button id="audio-toggle-btn" class="win-btn" style="font-size: 0.72rem; font-weight: bold; padding: 1px 6px;">VOL: ON</button>
+                <button id="achievements-btn" class="win-btn" style="font-size: 0.72rem; font-weight: bold; padding: 1px 6px;">ACHIEVEMENTS</button>
                 <button id="about-btn" class="win-btn" style="font-size: 0.72rem; font-weight: bold; padding: 1px 6px;">INFO</button>
                 <button id="support-btn" class="win-btn" style="font-size: 0.72rem; font-weight: bold; padding: 1px 6px; background-color: rgba(255, 234, 0, 0.15); border-color: var(--neon-yellow); color: var(--neon-yellow);">฿ SUPPORT</button>
                 <button id="lang-toggle-btn" class="win-btn" style="font-size: 0.72rem; font-weight: bold; padding: 1px 6px;">FR</button>
@@ -279,6 +281,26 @@
                 </div>
             </div>
 
+            <!-- Window 9: Achievements (achievements.sh) -->
+            <div class="window" id="win-achievements" style="top: 200px; left: 600px; width: 450px; height: 400px; display: none;">
+                <div class="window-header">
+                    <div class="window-title">~/terminal/achievements.sh</div>
+                    <div class="window-controls">
+                        <span class="win-btn win-min">_</span>
+                        <span class="win-btn" id="win-achievements-close">X</span>
+                    </div>
+                </div>
+                <div class="window-content terminal-theme">
+                    <div class="achievement-header" style="text-align: center; border-bottom: 1px solid var(--border-dim); padding-bottom: 10px; margin-bottom: 15px;">
+                        <h3 class="text-cyan">PIRACY BADGES</h3>
+                        <p style="font-size: 0.75rem; color: var(--text-muted);">Decrypted milestones and system exploits.</p>
+                    </div>
+                    <div class="achievement-list" id="achievement-list" style="display: flex; flex-direction: column; gap: 10px; overflow-y: auto; max-height: 280px; padding-right: 5px;">
+                        <!-- Dynamically filled by JS -->
+                    </div>
+                </div>
+            </div>
+
             <!-- Window 8: About / Credits -->
             <div class="window" id="win-about" style="top: 180px; left: 400px; width: 400px; height: 385px; display: none;">
                 <div class="window-header">
@@ -357,6 +379,8 @@
     <!-- Load scripts sequentially to avoid browser module CORS blocking on local files -->
     <script src="js/shop.js"></script>
     <script src="js/translations.js"></script>
+    <script src="js/achievementsData.js"></script>
+    <script src="js/audioManager.js"></script>
     <script src="js/gameState.js"></script>
     <script src="js/uiManager.js"></script>
     <script src="js/storyData.js"></script>

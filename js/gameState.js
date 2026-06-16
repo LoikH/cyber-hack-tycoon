@@ -33,6 +33,15 @@ class GameState {
         this.isSecurityUnlocked = false;
         this.isGhostUnlocked = false;
 
+        // Achievements & Stats
+        this.unlockedAchievements = []; // Array of IDs
+        this.totalClicks = 0;
+        this.totalLocEarned = 0;
+        this.totalCreditsEarned = 0;
+        this.stats = {
+            breachesWon: 0
+        };
+
         // Lockdown State
         this.isLockdown = false;
         this.lockdownProgress = 0;
@@ -56,11 +65,6 @@ class GameState {
         this.completedEvents = [];
         this.activeEventId = null;
         this.unreadCount = 0;
-        
-        // Settings / Analytics
-        this.totalClicks = 0;
-        this.totalLocEarned = 0;
-        this.totalCreditsEarned = 0;
     }
 
     // Save game to LocalStorage
@@ -85,7 +89,9 @@ class GameState {
             nodesConquered: this.nodesConquered,
             totalClicks: this.totalClicks,
             totalLocEarned: this.totalLocEarned,
-            totalCreditsEarned: this.totalCreditsEarned
+            totalCreditsEarned: this.totalCreditsEarned,
+            unlockedAchievements: this.unlockedAchievements,
+            stats: this.stats
         };
         localStorage.setItem("cyber_hack_tycoon_save", JSON.stringify(data));
     }
@@ -121,6 +127,8 @@ class GameState {
                 this.totalClicks = data.totalClicks || 0;
                 this.totalLocEarned = data.totalLocEarned || 0;
                 this.totalCreditsEarned = data.totalCreditsEarned || 0;
+                this.unlockedAchievements = data.unlockedAchievements || [];
+                this.stats = data.stats || { breachesWon: 0 };
                 
                 this.recalculateRates();
                 return true;

@@ -99,6 +99,15 @@ class UiManager {
         this.emailContent = document.getElementById("email-content");
         this.emailOptions = document.getElementById("email-options");
 
+        // Achievements Window elements
+        this.achievementsBtn = document.getElementById("achievements-btn");
+        this.achievementsWin = document.getElementById("win-achievements");
+        this.achievementsList = document.getElementById("achievement-list");
+        this.achievementsClose = document.getElementById("win-achievements-close");
+
+        // Audio Toggle
+        this.audioToggleBtn = document.getElementById("audio-toggle-btn");
+
         // Decryption Intrusion Mini-Game elements
         this.vulnWidget = document.getElementById("vuln-alert-widget");
         this.vulnTimerTxt = document.getElementById("vuln-alert-timer-txt");
@@ -131,6 +140,9 @@ class UiManager {
         // Global windows list (re-fetch dynamically to include newly added windows)
         this.windows = document.querySelectorAll(".window");
         this.notificationContainer = document.getElementById("notification-container");
+
+        // Achievements elements again to be sure they are in this.windows
+        this.windows = document.querySelectorAll(".window");
 
         // Fullscreen visual feedback and banner elements
         this.screenFeedback = document.getElementById("screen-feedback");
@@ -547,8 +559,9 @@ class UiManager {
 
     // Renders the hex grids and options for Decryption Intrusion Mini-Game
     renderIntrusionPuzzle(targetHex, optionsArray, onChoiceCallback) {
-        this.intrusionTarget.innerText = targetHex;
+        this.intrusionTarget.innerHTML = `<p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">TARGET_HEX</p><span style="font-size: 2rem; letter-spacing: 2px;">${targetHex}</span>`;
         this.intrusionGrid.innerHTML = "";
+        this.intrusionGrid.style.gridTemplateColumns = "repeat(4, 1fr)";
 
         optionsArray.forEach(opt => {
             const btn = document.createElement("button");
@@ -559,6 +572,64 @@ class UiManager {
             });
             this.intrusionGrid.appendChild(btn);
         });
+    }
+
+    renderSimonPuzzle(sequence, onInputCallback) {
+        this.intrusionTarget.innerHTML = `<p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">MEMORY_SYNC</p><span style="font-size: 1.2rem;">REPLICATE SEQUENCE</span>`;
+        this.intrusionGrid.innerHTML = "";
+        this.intrusionGrid.style.gridTemplateColumns = "repeat(2, 1fr)";
+        this.intrusionGrid.style.gap = "15px";
+
+        const colors = ["#00f3ff", "#ff00f7", "#00ff66", "#f3ff00"];
+        
+        for (let i = 0; i < 4; i++) {
+            const btn = document.createElement("button");
+            btn.className = "intrusion-btn simon-btn";
+            btn.style.height = "80px";
+            btn.style.borderColor = colors[i];
+            btn.style.background = `rgba(${i*50}, 255, 255, 0.05)`;
+            btn.addEventListener("click", () => {
+                onInputCallback(i);
+                btn.style.background = colors[i];
+                setTimeout(() => { btn.style.background = ""; }, 200);
+            });
+            this.intrusionGrid.appendChild(btn);
+        }
+
+        // Show sequence animation
+        let delay = 500;
+        sequence.forEach((val, idx) => {
+            setTimeout(() => {
+                const btns = this.intrusionGrid.querySelectorAll(".simon-btn");
+                btns[val].style.background = colors[val];
+                btns[val].style.boxShadow = `0 0 20px ${colors[val]}`;
+                setTimeout(() => {
+                    btns[val].style.background = "";
+                    btns[val].style.boxShadow = "";
+                }, 400);
+            }, delay);
+            delay += 700;
+        });
+    }
+
+    renderBrutePuzzle(targetRange, onActionCallback) {
+        this.intrusionTarget.innerHTML = `<p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">SIGNAL_INJECTION</p><span style="font-size: 1.2rem;">SYNC AT PEAK</span>`;
+        this.intrusionGrid.innerHTML = `
+            <div class="brute-container" style="grid-column: span 4; width: 100%; height: 100px; position: relative; background: rgba(255,255,255,0.05); border: 1px solid var(--border-dim); overflow: hidden;">
+                <div id="brute-target" style="position: absolute; left: ${targetRange.min}%; width: ${targetRange.max - targetRange.min}%; height: 100%; background: rgba(0, 255, 102, 0.2); border-left: 1px solid var(--neon-green); border-right: 1px solid var(--neon-green);"></div>
+                <div id="brute-slider" style="position: absolute; left: 0%; width: 4px; height: 100%; background: var(--neon-magenta); box-shadow: 0 0 10px var(--neon-magenta); transition: left 0.1s linear;"></div>
+            </div>
+            <button id="brute-action-btn" class="hack-btn" style="grid-column: span 4; margin-top: 20px; height: 50px;">
+                <span class="hack-btn-text">INJECT NOW</span>
+            </button>
+        `;
+        
+        document.getElementById("brute-action-btn").addEventListener("click", onActionCallback);
+    }
+
+    updateBruteSlider(pos) {
+        const slider = document.getElementById("brute-slider");
+        if (slider) slider.style.left = `${pos}%`;
     }
 
     // Displays a fullscreen visual flash and center-screen access banner
@@ -717,7 +788,7 @@ class UiManager {
     }
 
     // Translates and updates all static text elements in the HTML DOM on-the-fly
-    applyLanguage(state, gameTimer = 15) {
+    applyLanguage(state, audio, gameTimer = 15) {
         const lang = state.language || "en";
         const dict = TRANSLATIONS[lang] || TRANSLATIONS["en"];
 
@@ -790,6 +861,11 @@ class UiManager {
         this.updateCommlinkBadge(state);
         document.querySelector(".empty-inbox p").innerText = dict.emptyInbox;
         document.querySelector(".empty-inbox .sub").innerText = dict.emptyInboxSub;
+
+        // Achievements & Audio Toggle
+        this.achievementsBtn.innerText = dict.achievementsBtn;
+        this.audioToggleBtn.innerText = (audio && audio.enabled) ? dict.audioVolOn : dict.audioVolOff;
+        this.audioToggleBtn.style.color = (audio && audio.enabled) ? "var(--neon-green)" : "var(--text-muted)";
 
         // 5. G.H.O.S.T. / Conquest Window
         document.querySelector("#win-ghost .window-title").innerText = dict.ghostTitle;
@@ -932,6 +1008,38 @@ class UiManager {
             if (onConfirmCallback) {
                 onConfirmCallback();
             }
+        });
+    }
+
+    // Renders the achievements list
+    renderAchievements(state) {
+        const lang = state.language || "en";
+        this.achievementsList.innerHTML = "";
+
+        ACHIEVEMENTS_DATA.forEach(ach => {
+            const isUnlocked = state.unlockedAchievements.includes(ach.id);
+            const data = ach[lang] || ach["en"];
+
+            const item = document.createElement("div");
+            item.className = `achievement-item ${isUnlocked ? "unlocked" : "locked"}`;
+            item.style.display = "flex";
+            item.style.alignItems = "center";
+            item.style.gap = "12px";
+            item.style.padding = "8px";
+            item.style.border = "1px solid var(--border-dim)";
+            item.style.borderRadius = "3px";
+            item.style.background = isUnlocked ? "rgba(0, 255, 102, 0.05)" : "rgba(255, 255, 255, 0.02)";
+            item.style.opacity = isUnlocked ? "1" : "0.5";
+
+            item.innerHTML = `
+                <div class="ach-icon" style="font-size: 1.5rem; filter: ${isUnlocked ? "none" : "grayscale(1)"};">${ach.icon}</div>
+                <div class="ach-info">
+                    <div class="ach-name" style="font-weight: bold; color: ${isUnlocked ? "var(--neon-green)" : "var(--text-muted)"};">${data.name}</div>
+                    <div class="ach-desc" style="font-size: 0.75rem; color: var(--text-muted);">${data.desc}</div>
+                </div>
+                ${isUnlocked ? '<div class="ach-status" style="margin-left: auto; color: var(--neon-green); font-size: 0.7rem;">[COMPLETE]</div>' : ''}
+            `;
+            this.achievementsList.appendChild(item);
         });
     }
 }
