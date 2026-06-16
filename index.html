@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER-HACK TYCOON v1.0.4</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts for monospace hacking feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
+</head>
+<body class="crt">
+    <!-- CRT screen flicker effect overlay -->
+    <div class="crt-overlay"></div>
+
+    <!-- Fullscreen Visual Flash Feedback -->
+    <div id="screen-feedback" class="feedback-overlay"></div>
+
+    <!-- Center-screen Cinema Access Banners -->
+    <div id="center-banner-container" class="banner-container"></div>
+
+    <div class="desktop">
+        <!-- Top Status Bar -->
+        <header class="status-bar">
+            <div class="status-left">
+                <span class="logo glitch" data-text="CYBER_OS">CYBER_OS v1.0.4</span>
+                <span class="status-divider">|</span>
+                <span class="status-sec">THREAT LEVEL: <span id="threat-val" class="neon-green">SECURE</span></span>
+            </div>
+            <div class="status-middle">
+                <div class="stat-counter">
+                    <span class="label">LINES OF CODE:</span>
+                    <span id="loc-count" class="value text-cyan">0</span>
+                </div>
+                <div class="stat-counter">
+                    <span class="label">CREDITS (฿):</span>
+                    <span id="credits-count" class="value text-magenta">0.00</span>
+                </div>
+                <div class="stat-counter">
+                    <span class="label">NET RATE:</span>
+                    <span id="pps-count" class="value text-green">0/s</span>
+                </div>
+            </div>
+            <div class="status-right">
+                <button id="lang-toggle-btn" class="win-btn" style="font-size: 0.72rem; font-weight: bold; padding: 1px 6px;">FR</button>
+                <span id="time-display">00:00:00</span>
+            </div>
+        </header>
+
+        <!-- Desktop Grid with Windows -->
+        <main class="workspace">
+            
+            <!-- Window 1: Terminal (Primary Clicker) -->
+            <div class="window" id="win-terminal" style="top: 80px; left: 50px; width: 450px; height: 420px;">
+                <div class="window-header">
+                    <div class="window-title">~/terminal/main_exploit.sh</div>
+                    <div class="window-controls">
+                        <span class="win-btn win-min">_</span>
+                        <span class="win-btn win-max">[]</span>
+                    </div>
+                </div>
+                <div class="window-content terminal-theme">
+                    <div class="terminal-log" id="terminal-log">
+                        <p class="system-msg">> INITIALIZING EXPLOIT CONSOLE...</p>
+                        <p class="system-msg">> SYSTEM READINESS: 100%</p>
+                        <p class="system-msg">> READY TO INJECT CODE BLOCKS.</p>
+                    </div>
+                    <button class="hack-btn" id="hack-btn">
+                        <span class="hack-btn-glow"></span>
+                        <span class="hack-btn-text">INJECT EXPLOIT CODE</span>
+                    </button>
+                    <div class="terminal-footer">
+                        <span>Press any key or click button to compile...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Window 2: Network / Upgrade Shop -->
+            <div class="window" id="win-shop" style="top: 80px; left: 530px; width: 420px; height: 500px;">
+                <div class="window-header">
+                    <div class="window-title">~/darknet/black_market.exe</div>
+                    <div class="window-controls">
+                        <span class="win-btn win-min">_</span>
+                        <span class="win-btn win-max">[]</span>
+                    </div>
+                </div>
+                <div class="window-content shop-theme">
+                    <div class="shop-tabs">
+                        <button class="tab-btn active" data-tab="upgrades">EXPLOITS & SCRIPTS</button>
+                        <button class="tab-btn" data-tab="security">SECURITY & VPN</button>
+                        <button class="tab-btn" id="convert-tab-btn">CONVERSION (LOC -> ฿)</button>
+                    </div>
+                    <div class="shop-panels">
+                        <div class="shop-panel active" id="tab-upgrades">
+                            <div class="shop-list" id="shop-items-container">
+                                <!-- Dynamically filled by JS -->
+                            </div>
+                        </div>
+                        <div class="shop-panel" id="tab-security" style="display: none;">
+                            <div class="shop-list" id="security-items-container">
+                                <!-- Dynamically filled by JS -->
+                            </div>
+                        </div>
+                        <div class="shop-panel" id="tab-conversion" style="display: none;">
+                            <div class="conversion-box">
+                                <h3>Data Exchange Bureau</h3>
+                                <p>Sell gathered exploit lines of code on the dark web exchange market for crypto credits.</p>
+                                <div class="exchange-stats">
+                                    <p>Current Rate: <span class="text-cyan">10 LoC</span> = <span class="text-magenta">฿1.00</span></p>
+                                </div>
+                                <div class="exchange-controls">
+                                    <button class="action-btn" id="sell-all-btn">SELL ALL LOC</button>
+                                    <button class="action-btn" id="sell-half-btn">SELL 50% LOC</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Window 3: Commlink / Narrative Inbox -->
+            <div class="window" id="win-commlink" style="top: 350px; left: 1000px; width: 400px; height: 350px;">
+                <div class="window-header">
+                    <div class="window-title">~/secure_comm/commlink.msg</div>
+                    <div class="window-controls">
+                        <span class="win-btn win-min">_</span>
+                        <span class="win-btn win-max">[]</span>
+                    </div>
+                </div>
+                <div class="window-content commlink-theme">
+                    <div class="inbox-header">
+                        <span class="inbox-title">SECURE COMMUNICATIONS</span>
+                        <span class="unread-badge" id="unread-count">0 UNREAD</span>
+                    </div>
+                    <div class="commlink-body">
+                        <div class="empty-inbox" id="empty-inbox">
+                            <div class="glitch-icon">👁️</div>
+                            <p>No active encryption tunnels found.</p>
+                            <p class="sub">Scanning deep web bands for incoming handshakes...</p>
+                        </div>
+                        <div class="email-view" id="email-view" style="display: none;">
+                            <div class="email-header">
+                                <div><strong>FROM:</strong> <span id="email-from" class="text-green">???</span></div>
+                                <div><strong>SUBJECT:</strong> <span id="email-subj">CRYPT_HANDSHAKE</span></div>
+                            </div>
+                            <div class="email-content" id="email-content">
+                                <!-- Content dynamically generated -->
+                            </div>
+                            <div class="email-options" id="email-options">
+                                <!-- Option buttons dynamic -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Window 5: Active Logs Cleaner -->
+            <div class="window" id="win-clear-logs" style="top: 420px; left: 50px; width: 450px; height: 360px;">
+                <div class="window-header">
+                    <div class="window-title">~/terminal/clear_logs.sh</div>
+                    <div class="window-controls">
+                        <span class="win-btn win-min">_</span>
+                        <span class="win-btn win-max">[]</span>
+                    </div>
+                </div>
+                <div class="window-content terminal-theme">
+                    <div class="logs-cleaner-gauge">
+                        <span class="gauge-label">TRACE EXPOSURE VECTOR:</span>
+                        <div class="gauge-container">
+                            <div class="gauge-bar" id="cleaner-gauge-bar"></div>
+                            <span class="gauge-txt" id="cleaner-gauge-txt">0.0%</span>
+                        </div>
+                        <div class="gauge-sub">Passive VPN shielding: <span id="cleaner-passive-shield" class="text-cyan">-0.00%/s</span></div>
+                    </div>
+                    <div class="terminal-log" id="cleaner-log">
+                        <p class="system-msg">> SECURITY CONSOLE IDLE.</p>
+                        <p class="system-msg">> READY TO OVERRIDE INTRUSION PATHS.</p>
+                    </div>
+                    <button class="hack-btn" id="cleaner-scrub-btn" style="height: 48px; font-size: 0.95rem; margin-top: 10px;">
+                        <span class="hack-btn-text">SCRUB SENSITIVE LOGS</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Window 6: Project G.H.O.S.T. & Mainframe Domination -->
+            <div class="window" id="win-ghost" style="top: 150px; left: 1000px; width: 420px; height: 500px;">
+                <div class="window-header">
+                    <div class="window-title">~/secure_comm/project_ghost.exe</div>
+                    <div class="window-controls">
+                        <span class="win-btn win-min">_</span>
+                        <span class="win-btn win-max">[]</span>
+                    </div>
+                </div>
+                <div class="window-content ghost-theme" style="padding: 0;">
+                    <div class="shop-tabs">
+                        <button class="tab-btn active" data-tab="conquest">MAINFRAME CONQUEST</button>
+                        <button class="tab-btn" data-tab="ghost">G.H.O.S.T. AI</button>
+                    </div>
+                    <div class="shop-panels" style="padding: 15px;">
+                        <!-- Panel 1: Conquest Nodes -->
+                        <div class="shop-panel active" id="tab-conquest">
+                            <div class="conquest-summary">
+                                <h3 class="text-cyan">Mainframe Domination</h3>
+                                <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; line-height: 1.3;">Infiltrate secure servers to seize controlled nodes and unlock permanent global system modifiers.</p>
+                            </div>
+                            <div class="shop-list" id="conquest-nodes-container" style="gap: 10px; margin-top: 12px;">
+                                <!-- Filled dynamically by JS -->
+                            </div>
+                        </div>
+                        
+                        <!-- Panel 2: G.H.O.S.T. AI -->
+                        <div class="shop-panel" id="tab-ghost" style="display: none;">
+                            <div class="ai-header" style="display: flex; gap: 15px; margin-bottom: 12px; align-items: center; background: rgba(0,255,102,0.03); border: 1px solid var(--border-dim); padding: 10px; border-radius: 3px;">
+                                <div class="ai-avatar" id="ai-avatar-icon" style="font-size: 2.2rem; filter: drop-shadow(0 0 5px var(--neon-green));">👁️</div>
+                                <div class="ai-info-box">
+                                    <div class="ai-name" style="font-size: 1.25rem; font-weight: bold; color: var(--neon-green); text-shadow: var(--glow-green);">G.H.O.S.T. Core v<span id="ai-level-txt">1</span></div>
+                                    <div class="ai-status" id="ai-status-txt" style="font-size: 0.8rem; color: var(--text-muted);">Embryo Node Core</div>
+                                </div>
+                            </div>
+                            <div class="ai-experience-box" style="margin-bottom: 15px;">
+                                <div class="gauge-label" style="font-size: 0.78rem;">AI SYNAPTIC EXPERIENCE: <span id="ai-exp-txt" class="text-green">0 / 2,500</span></div>
+                                <div class="gauge-container" style="height: 18px; margin-top: 4px;">
+                                    <div class="gauge-bar" id="ai-exp-bar" style="background: linear-gradient(90deg, #00f0ff, var(--neon-green)); box-shadow: var(--glow-green);"></div>
+                                </div>
+                                <button class="action-btn" id="feed-ai-btn" style="margin-top: 10px; font-size: 0.82rem; padding: 6px;">FEED 1,000 LOC TO CORE (EXP +1,000)</button>
+                            </div>
+                            <div class="ai-skills-header" style="font-size: 0.8rem; font-weight: bold; color: var(--text-primary); border-bottom: 1px solid var(--border-dim); padding-bottom: 4px; margin-bottom: 8px;">UNLOCKED SYNAPTIC POWERS:</div>
+                            <div class="shop-list" id="ai-skills-container" style="gap: 8px;">
+                                <!-- Filled dynamically by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Window 7: System Tutorial / User Onboarding -->
+            <div class="window" id="win-tutorial" style="top: 60px; left: 50%; transform: translateX(-50%); width: 560px; height: auto; z-index: 100000; display: none;">
+                <div class="window-header" style="background-color: rgba(0, 255, 102, 0.1); border-bottom: 2px solid var(--border-color);">
+                    <div class="window-title">SYSTEM_MANUAL: Boot_Sequence_Tutorial.md</div>
+                    <div class="window-controls">
+                        <!-- Standard tutorial has no minimize controls, must enter system -->
+                    </div>
+                </div>
+                <div class="window-content terminal-theme" style="padding: 22px; line-height: 1.45;">
+                    <div class="tutorial-logo" style="text-align: center; margin-bottom: 15px;">
+                        <h2 class="glitch" data-text="👁️ CYBER_OS INTRUDER MANUAL 👁️" style="color: var(--neon-green); font-size: 1.5rem; text-shadow: var(--glow-green);">👁️ CYBER_OS INTRUDER MANUAL 👁️</h2>
+                        <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 4px;">Welcome operator. Read security directives before accessing global subnets.</div>
+                    </div>
+                    <div class="tutorial-scroll-box" style="border: 1px dashed var(--border-dim); padding: 12px; background: rgba(0,0,0,0.5); border-radius: 3px; font-size: 0.84rem; display: flex; flex-direction: column; gap: 12px; max-height: 280px; overflow-y: auto;">
+                        <div>
+                            <strong style="color: var(--neon-cyan); text-shadow: var(--glow-cyan);">1. ACTIVE COMPILING (GENERATION ACTIVE) :</strong><br>
+                            Click <strong>"INJECT EXPLOIT CODE"</strong> inside the Terminal Window, or <strong>PRESS ANY KEY ON YOUR KEYBOARD</strong> to compile exploit Lines of Code (LoC) at lightning speeds.
+                        </div>
+                        <div>
+                            <strong style="color: var(--neon-cyan); text-shadow: var(--glow-cyan);">2. DARKNET BLACK MARKET (AUTOMATION) :</strong><br>
+                            Go to the Black Market shop. Convert your LoC code into crypto <strong>Crédits (฿)</strong> in the conversion tab, then purchase bots and trojans to generate code automatically.
+                        </div>
+                        <div>
+                            <strong style="color: var(--neon-cyan); text-shadow: var(--glow-cyan);">3. EXPOSURE & LOG SCRUBBING (SECURITY) :</strong><br>
+                            Active bots leak traces and creep up your <strong>Threat Level</strong>. If threat hits 100%, NetWatch triggers a lockdown! Use the <strong>Logs Cleaner</strong> window (click or type inside it) or buy VPN upgrades to keep the profile low.
+                        </div>
+                        <div>
+                            <strong style="color: var(--neon-cyan); text-shadow: var(--glow-cyan);">4. BYPASS INTRUSION MINI-GAMES :</strong><br>
+                            Every 45-75s, a vulnerability appears! Click the floating lightning button and solve the hex matching puzzle in 15 seconds to gain a massive credits payout.
+                        </div>
+                        <div>
+                            <strong style="color: var(--neon-cyan); text-shadow: var(--glow-cyan);">5. G.H.O.S.T. AI & CONQUEST (ENDGAME) :</strong><br>
+                            Feed code to your AI core to unlock powers (Overclocking, Blackout, Cash siphons). Hack the 5 global target mainframes to permanently bend system limits and win the campaign!
+                        </div>
+                    </div>
+                    <button class="hack-btn" id="tutorial-close-btn" style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 18px; border-color: var(--neon-green); box-shadow: var(--glow-green);">
+                        <span class="hack-btn-text">INITIALIZE BOOT SEQUENCE / ENTER MATRIX</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Window 4: Decryption Intrusion Mini-Game -->
+            <div class="window" id="win-intrusion" style="top: 180px; left: 300px; width: 400px; height: 335px; display: none;">
+                <div class="window-header">
+                    <div class="window-title">~/darknet/bypass_injector.sh</div>
+                    <div class="window-controls">
+                        <span class="win-btn" id="win-intrusion-close">X</span>
+                    </div>
+                </div>
+                <div class="window-content intrusion-theme">
+                    <div class="intrusion-timer-bar"><div id="intrusion-progress"></div></div>
+                    <div class="intrusion-header">
+                        <span class="text-yellow text-blink-slow">⚠️ SECURE VECTOR LOCATED ⚠️</span>
+                        <p>MATCH CODES TO DECRYPT PORT ROUTE :</p>
+                        <div class="intrusion-target" id="intrusion-target">0xDE8B</div>
+                    </div>
+                    <div class="intrusion-grid" id="intrusion-grid">
+                        <!-- Filled dynamically with options -->
+                    </div>
+                    <div class="intrusion-footer">
+                        <span id="intrusion-timer-txt">Time remaining: 15s</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Floating Intrusion Detection Alert Widget -->
+            <div id="vuln-alert-widget" class="vuln-alert-button" style="display: none;">
+                <span class="vuln-alert-icon">⚡</span>
+                <span class="vuln-alert-text">PORT VULNERABLE : INITIATE EXPLOIT</span>
+                <span class="vuln-alert-timer" id="vuln-alert-timer-txt">(15s)</span>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Notification Overlay -->
+    <div id="notification-container"></div>
+
+    <!-- Load scripts sequentially to avoid browser module CORS blocking on local files -->
+    <script src="js/shop.js"></script>
+    <script src="js/translations.js"></script>
+    <script src="js/gameState.js"></script>
+    <script src="js/uiManager.js"></script>
+    <script src="js/storyData.js"></script>
+    <script src="js/storyEngine.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
