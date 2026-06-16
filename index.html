@@ -27,6 +27,8 @@
                 <span class="logo glitch" data-text="CYBER_OS">CYBER_OS v1.0.4</span>
                 <span class="status-divider">|</span>
                 <span class="status-sec">THREAT LEVEL: <span id="threat-val" class="neon-green">SECURE</span></span>
+                <span class="status-divider">|</span>
+                <span class="status-sec" style="color: var(--text-muted); font-size: 0.85rem;">ARCHITECT: <span style="color: var(--neon-green); font-weight: bold;">LoikH</span></span>
             </div>
             <div class="status-middle">
                 <div class="stat-counter">
@@ -43,6 +45,8 @@
                 </div>
             </div>
             <div class="status-right">
+                <button id="about-btn" class="win-btn" style="font-size: 0.72rem; font-weight: bold; padding: 1px 6px;">INFO</button>
+                <button id="support-btn" class="win-btn" style="font-size: 0.72rem; font-weight: bold; padding: 1px 6px; background-color: rgba(255, 234, 0, 0.15); border-color: var(--neon-yellow); color: var(--neon-yellow);">฿ SUPPORT</button>
                 <button id="lang-toggle-btn" class="win-btn" style="font-size: 0.72rem; font-weight: bold; padding: 1px 6px;">FR</button>
                 <span id="time-display">00:00:00</span>
             </div>
@@ -245,7 +249,7 @@
                 <div class="window-content terminal-theme" style="padding: 22px; line-height: 1.45;">
                     <div class="tutorial-logo" style="text-align: center; margin-bottom: 15px;">
                         <h2 class="glitch" data-text="👁️ CYBER_OS INTRUDER MANUAL 👁️" style="color: var(--neon-green); font-size: 1.5rem; text-shadow: var(--glow-green);">👁️ CYBER_OS INTRUDER MANUAL 👁️</h2>
-                        <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 4px;">Welcome operator. Read security directives before accessing global subnets.</div>
+                        <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 4px;">System Architect: <strong style="color: var(--neon-green); text-shadow: var(--glow-green);">LoikH</strong> | Read security directives before accessing subnets.</div>
                     </div>
                     <div class="tutorial-scroll-box" style="border: 1px dashed var(--border-dim); padding: 12px; background: rgba(0,0,0,0.5); border-radius: 3px; font-size: 0.84rem; display: flex; flex-direction: column; gap: 12px; max-height: 280px; overflow-y: auto;">
                         <div>
@@ -271,6 +275,29 @@
                     </div>
                     <button class="hack-btn" id="tutorial-close-btn" style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 18px; border-color: var(--neon-green); box-shadow: var(--glow-green);">
                         <span class="hack-btn-text">INITIALIZE BOOT SEQUENCE / ENTER MATRIX</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Window 8: About / Credits -->
+            <div class="window" id="win-about" style="top: 180px; left: 400px; width: 400px; height: 325px; display: none;">
+                <div class="window-header">
+                    <div class="window-title">~/about/readme.txt</div>
+                    <div class="window-controls">
+                        <span class="win-btn" id="win-about-close">X</span>
+                    </div>
+                </div>
+                <div class="window-content terminal-theme" style="font-size: 0.85rem; line-height: 1.45; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <h3 style="color: var(--neon-green); text-shadow: var(--glow-green); margin-bottom: 4px;">CYBER-HACK TYCOON</h3>
+                        <p style="color: var(--text-muted); font-size: 0.72rem; margin-bottom: 12px;">SYSTEM VERSION v1.0.4</p>
+                        <p style="margin-bottom: 6px;"><strong>Core Architect:</strong> LoikH</p>
+                        <p style="margin-bottom: 6px;"><strong>Release Year:</strong> 2026</p>
+                        <p style="margin-bottom: 6px;"><strong>Engine:</strong> HTML5 / CSS3 / Vanilla JS (No Modules)</p>
+                        <p style="margin-top: 10px; font-size: 0.78rem; color: #dedede;">This system is free, independent software. Please consider supporting the creator on Itch.io to fund next-gen cybersecurity subnets.</p>
+                    </div>
+                    <button class="hack-btn" id="about-donate-btn" style="width: 100%; height: 38px; font-size: 0.82rem; margin-top: 10px; border-color: var(--neon-yellow); color: var(--neon-yellow); background: rgba(255,234,0,0.05); cursor: pointer;">
+                        <span class="hack-btn-text">SUPPORT LOIKH ON ITCH.IO</span>
                     </button>
                 </div>
             </div>

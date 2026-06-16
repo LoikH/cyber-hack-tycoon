@@ -372,5 +372,41 @@ const STORY_EVENTS = [
                 }
             }
         ]
+    },
+    {
+        id: "creator_msg",
+        from: "LoikH (Architect)",
+        subject: "SYS_MESSAGE: External Handshake",
+        trigger: (state) => state.credits >= 60 && !state.completedEvents.includes("creator_msg"),
+        text: (state) => state.language === "fr" ?
+            `Salut opérateur ! Je suis LoikH, l'architecte système derrière ce logiciel CyberOS. 
+            <br><br>
+            J'espère que tu prends du plaisir à infiltrer les sous-réseaux corporatifs et à esquiver les traceurs de NetWatch. Ce jeu est entièrement gratuit et indépendant. 
+            <br><br>
+            Si tu aimes mon travail et souhaites soutenir le développement de futures mises à jour (ou m'offrir un café !), n'hésite pas à laisser un petit pourboire sur ma page Itch.io. Un énorme merci pour ton temps et ton soutien !` :
+            `Hi operator! I am LoikH, the system architect behind this CyberOS software.
+            <br><br>
+            I hope you are having a blast hacking corporate subnetworks and dodging NetWatch cyber-police tracers. This game is 100% free and independent.
+            <br><br>
+            If you enjoy my work and want to help support future updates (or buy me a coffee!), please consider leaving a small tip on my Itch.io support page. Thank you so much for your time and help!`,
+        options: [
+            {
+                text: (state) => state.language === "fr" ?
+                    "[SOUTENIR LOIKH (ITCH.IO)]" :
+                    "[SUPPORT LOIKH (DONATE)]",
+                action: (state) => {
+                    window.open("https://loikh.itch.io/cyber-hack-tycoon", "_blank");
+                    state.completedEvents.push("creator_msg");
+                }
+            },
+            {
+                text: (state) => state.language === "fr" ?
+                    "[EFFACER LE MESSAGE] Connexion fermée." :
+                    "[DELETE EMAIL] Connection closed.",
+                action: (state) => {
+                    state.completedEvents.push("creator_msg");
+                }
+            }
+        ]
     }
 ];

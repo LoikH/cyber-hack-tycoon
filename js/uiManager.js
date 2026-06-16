@@ -142,6 +142,13 @@ class UiManager {
 
         // Language toggle element
         this.langToggleBtn = document.getElementById("lang-toggle-btn");
+
+        // About & Support window elements
+        this.supportBtn = document.getElementById("support-btn");
+        this.aboutBtn = document.getElementById("about-btn");
+        this.winAbout = document.getElementById("win-about");
+        this.winAboutClose = document.getElementById("win-about-close");
+        this.aboutDonateBtn = document.getElementById("about-donate-btn");
     }
 
     // Initialize drag & drop for desktop windows
@@ -715,6 +722,12 @@ class UiManager {
 
         // Update Toggle Button Text
         this.langToggleBtn.innerText = lang.toUpperCase();
+        this.supportBtn.innerText = dict.supportBtn;
+        this.aboutBtn.innerText = dict.aboutBtn;
+        document.querySelector("#win-about .window-title").innerText = dict.aboutTitle;
+        document.querySelector("#win-about h3").innerText = dict.aboutHeader;
+        document.querySelector("#win-about p:nth-of-type(4)").innerText = dict.aboutDesc;
+        this.aboutDonateBtn.querySelector(".hack-btn-text").innerText = dict.aboutDonateBtn;
 
         // 1. Status Bar
         document.querySelector(".logo").innerText = dict.logo;

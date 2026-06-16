@@ -323,6 +323,24 @@ document.addEventListener("DOMContentLoaded", () => {
         ui.renderShop(state, buyUpgrade);
     });
 
+    // --- ABOUT & SUPPORT BUTTONS LISTENERS ---
+    ui.supportBtn.addEventListener("click", () => {
+        window.open("https://loikh.itch.io/cyber-hack-tycoon", "_blank");
+    });
+
+    ui.aboutBtn.addEventListener("click", () => {
+        ui.winAbout.style.display = "flex";
+        ui.focusWindow(ui.winAbout);
+    });
+
+    ui.winAboutClose.addEventListener("click", () => {
+        ui.winAbout.style.display = "none";
+    });
+
+    ui.aboutDonateBtn.addEventListener("click", () => {
+        window.open("https://loikh.itch.io/cyber-hack-tycoon", "_blank");
+    });
+
     // --- DECRYPTION INTRUSION MINI-GAME LOGIC ---
 
     // Trigger floating vulnerability alert

@@ -14,6 +14,14 @@ const TRANSLATIONS = {
         critical: "CRITIQUE",
         lockdown: "CONFINEMENT",
         
+        // About & Support Buttons
+        supportBtn: "฿ SOUTIEN",
+        aboutBtn: "INFO",
+        aboutTitle: "~/about/readme.txt",
+        aboutHeader: "CYBER-HACK TYCOON",
+        aboutDesc: "Ce système est un logiciel libre et indépendant. Pensez à soutenir le créateur sur Itch.io pour financer le développement de nouveaux virus !",
+        aboutDonateBtn: "SOUTENIR LOIKH SUR ITCH.IO",
+        
         // Terminal Window
         terminalTitle: "~/terminal/code_exploit.sh",
         terminalTitleLockdown: "~/terminal/purge_urgence_sys.sh",
@@ -115,7 +123,7 @@ const TRANSLATIONS = {
         
         // Conquest nodes
         conquest: {
-            bank: { name: "Banque Centrale du District", desc: "Infiltrez et redirigez les en-têtes de transactions bancaires.", req: "Requiert : 20 DDoS Bots", reward: "Récompense: Taux de conversion LoC ➔ ฿ augmenté de +15%" },
+            bank: { name: "District Central Bank", desc: "Infiltrez et redirigez les en-têtes de transactions bancaires.", req: "Requiert : 20 DDoS Bots", reward: "Récompense: Taux de conversion LoC ➔ ฿ augmenté de +15%" },
             police: { name: "Cluster de Données Cyber-Police", desc: "Corrompez les bases de NetWatch pour retarder les interventions.", req: "Requiert : 15 Port Scanners", reward: "Récompense: Jauge de sécurité étendue (Menace maximum fixée à 120%)" },
             satellite: { name: "Satellite ComSat-9 NetWatch", desc: "Interceptez les faisceaux orbitaux pour bloquer le traçage.", req: "Requiert : 8 Trojans", reward: "Récompense: Toutes les défenses VPN de la boutique coûtent 20% de moins" },
             military: { name: "Réseau Militaire Ring-0 Apex", desc: "Infiltrez les serveurs de calcul tactiques pour booster le codage.", req: "Requiert : 3 AI Rootkits", reward: "Récompense: Compilateur actif optimisé (+1 LoC par clic/touche)" },
@@ -142,6 +150,14 @@ const TRANSLATIONS = {
         wanted: "WANTED",
         critical: "CRITICAL",
         lockdown: "LOCKDOWN",
+        
+        // About & Support Buttons
+        supportBtn: "฿ SUPPORT",
+        aboutBtn: "INFO",
+        aboutTitle: "~/about/readme.txt",
+        aboutHeader: "CYBER-HACK TYCOON",
+        aboutDesc: "This system is free, independent software. Please consider supporting the creator on Itch.io to fund next-gen cybersecurity subnets.",
+        aboutDonateBtn: "SUPPORT LOIKH ON ITCH.IO",
         
         // Terminal Window
         terminalTitle: "~/terminal/main_exploit.sh",
