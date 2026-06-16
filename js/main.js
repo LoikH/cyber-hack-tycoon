@@ -85,6 +85,9 @@ document.addEventListener("DOMContentLoaded", () => {
             ui.updateStats(state);
             ui.renderShop(state, buyUpgrade);
             
+            // Re-evaluate mobile views on tutorial validation
+            updateMobileWindowVisibility();
+
             ui.showNotification("DECRYPTING INTERFACE", "Establishing deep web gateway. Good luck, operator.", "success");
             
             // Instantly check and trigger the starting Cipher narrative email handshake!
@@ -254,12 +257,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Re-apply language which dynamically reveals clear_logs window and security shop tab!
                 ui.applyLanguage(state, gameTimer);
                 
+                // Real-time mobile navigation bar updates
+                updateMobileNavBar();
+                updateMobileWindowVisibility();
+                
                 // Trigger Security campaign tutorial popup!
                 ui.showTutorialPopup("security", state, () => {
                     ui.showNotification("SECURITY SYSTEMS ENGAGED", "clear_logs.sh and VPN Darknet nodes activated.", "success");
                 });
             }
-            
+
             ui.updateStats(state);
             ui.renderShop(state, buyUpgrade);
             ui.renderConquestNodes(state, attackNode);
@@ -348,6 +355,10 @@ document.addEventListener("DOMContentLoaded", () => {
             ui.renderConquestNodes(state, attackNode);
             ui.renderAiCore(state, activeCooldowns, activateSkillPower);
             
+            // Real-time mobile navigation bar updates
+            updateMobileNavBar();
+            updateMobileWindowVisibility();
+
             // Trigger G.H.O.S.T. / Conquest campaign tutorial popup!
             ui.showTutorialPopup("ghost", state, () => {
                 ui.showNotification("G.H.O.S.T. IA CORE ONLINE", "Project G.H.O.S.T. and Conquest Dashboard activated.", "success");
@@ -385,6 +396,74 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.reload(); // reboot page cleanly
         }
     });
+
+    // --- MOBILE TASKBAR NAVIGATION ENGINE ---
+    const taskbarItems = document.querySelectorAll(".taskbar-item");
+    const mobileNavBar = document.getElementById("mobile-nav-bar");
+
+    // Initialize mobile taskbar buttons based on progressive unlocks
+    function updateMobileNavBar() {
+        document.getElementById("taskbar-clear-logs").style.display = state.isSecurityUnlocked ? "inline-block" : "none";
+        document.getElementById("taskbar-ghost").style.display = state.isGhostUnlocked ? "inline-block" : "none";
+    }
+
+    // Set default visible window on mobile
+    function updateMobileWindowVisibility() {
+        const allWin = document.querySelectorAll(".window");
+        allWin.forEach(win => {
+            win.classList.remove("mobile-visible");
+        });
+
+        if (!state.tutorialRead) {
+            // Force Commlink to be visible on first launch mobile
+            document.getElementById("win-commlink").classList.add("mobile-visible");
+            // Set active icon to Commlink
+            taskbarItems.forEach(item => {
+                item.classList.remove("active-item");
+                if (item.getAttribute("data-target") === "win-commlink") {
+                    item.classList.add("active-item");
+                }
+            });
+        } else {
+            // Default: show terminal compiling window on mobile
+            document.getElementById("win-terminal").classList.add("mobile-visible");
+            taskbarItems.forEach(item => {
+                item.classList.remove("active-item");
+                if (item.getAttribute("data-target") === "win-terminal") {
+                    item.classList.add("active-item");
+                }
+            });
+        }
+    }
+
+    // Bind taskbar buttons click events
+    taskbarItems.forEach(item => {
+        item.addEventListener("click", () => {
+            const targetId = item.getAttribute("data-target");
+            const targetWin = document.getElementById(targetId);
+
+            if (!targetWin) return;
+
+            // 1. Highlight active icon
+            taskbarItems.forEach(t => t.classList.remove("active-item"));
+            item.classList.add("active-item");
+
+            // 2. Toggle visible window in viewport
+            const allWin = document.querySelectorAll(".window");
+            allWin.forEach(win => {
+                if (win.id === targetId) {
+                    win.classList.add("mobile-visible");
+                    ui.focusWindow(win);
+                } else {
+                    win.classList.remove("mobile-visible");
+                }
+            });
+        });
+    });
+
+    // Initial mobile bar setups
+    updateMobileNavBar();
+    updateMobileWindowVisibility();
 
     // --- DECRYPTION INTRUSION MINI-GAME LOGIC ---
 

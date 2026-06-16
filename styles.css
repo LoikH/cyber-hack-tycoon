@@ -1183,4 +1183,148 @@ body {
     margin-top: 2px;
 }
 
+/* --- MOBILE & TABLET RESPONSIVENESS SYSTEM --- */
+
+.mobile-taskbar {
+    display: none; /* Hidden by default on desktop */
+}
+
+@media (max-width: 768px) {
+    /* Reveal and style the mobile bottom navigation taskbar */
+    .mobile-taskbar {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 55px;
+        background-color: var(--bg-darker);
+        border-top: 2px solid var(--border-dim);
+        justify-content: space-around;
+        align-items: center;
+        z-index: 10000;
+        box-shadow: 0 -4px 15px rgba(0, 255, 102, 0.1);
+        padding: 0 5px;
+    }
+
+    .taskbar-item {
+        background: none;
+        border: none;
+        font-size: 1.4rem;
+        cursor: pointer;
+        padding: 6px 12px;
+        border-radius: 4px;
+        color: var(--text-muted);
+        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .taskbar-item:hover {
+        background: rgba(0, 240, 255, 0.05);
+        color: var(--neon-cyan);
+    }
+
+    .taskbar-item.active-item {
+        background: rgba(0, 255, 102, 0.06);
+        color: var(--neon-green);
+        border-bottom: 2px solid var(--neon-green);
+        text-shadow: var(--glow-green);
+        filter: drop-shadow(0 0 4px var(--neon-green));
+    }
+
+    /* Convert absolute floating windows into full-viewport stacked windows */
+    .window {
+        display: none !important; /* Hide all windows by default on mobile */
+        position: fixed !important;
+        top: 45px !important;
+        left: 8px !important;
+        width: calc(100% - 16px) !important;
+        height: calc(100% - 112px) !important;
+        max-height: calc(100% - 112px) !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.85);
+        z-index: 100 !important;
+    }
+
+    /* Show only the active/toggled window */
+    .window.mobile-visible {
+        display: flex !important;
+    }
+
+    /* Let overlays always sit on top */
+    #win-tutorial, #win-intrusion {
+        z-index: 100000 !important;
+    }
+
+    /* Adjust Status Bar metrics to fit tight phone displays (down to 320px) */
+    .status-bar {
+        font-size: 0.72rem;
+        height: 45px;
+        padding: 0 8px;
+    }
+
+    .status-left, .status-middle {
+        gap: 6px;
+    }
+
+    .status-right {
+        gap: 4px;
+    }
+
+    .status-divider {
+        display: none; /* Hide dividers to conserve horizontal space */
+    }
+
+    .status-left .status-sec {
+        display: none; /* Hide 'Architect: LoikH' text in header, it's visible in INFO/TUTO anyway */
+    }
+
+    .stat-counter {
+        gap: 2px;
+        padding: 1px 4px;
+        background: none;
+        border: none;
+    }
+
+    .stat-counter .label {
+        display: none; /* Hide text labels (LINES OF CODE, etc.), keep only colored numbers! */
+    }
+
+    .stat-counter .value {
+        font-size: 0.95rem;
+    }
+
+    #time-display {
+        display: none; /* Hide clock on mobile to make room for currency counts */
+    }
+
+    /* Disable drag header move cursor visual on touchscreens */
+    .window-header {
+        cursor: default;
+    }
+
+    /* Touch-friendly compilation and action button sizing */
+    .hack-btn {
+        height: 54px;
+        font-size: 1rem;
+    }
+
+    /* Adjust Hex Matching Grid columns on tiny screens */
+    .intrusion-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 6px !important;
+    }
+
+    .intrusion-target {
+        font-size: 1.5rem;
+        padding: 4px 10px;
+    }
+
+    /* Reposition vulnerability alert above mobile taskbar */
+    .vuln-alert-button {
+        width: calc(100% - 24px) !important;
+        bottom: 68px !important;
+        padding: 8px 16px;
+        justify-content: center;
+    }
+}
+
 

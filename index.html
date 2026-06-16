@@ -344,6 +344,16 @@
     <!-- Notification Overlay -->
     <div id="notification-container"></div>
 
+    <!-- Mobile Taskbar / Bottom Navigation Bar -->
+    <nav class="mobile-taskbar" id="mobile-nav-bar">
+        <button class="taskbar-item active-item" data-target="win-terminal">💻</button>
+        <button class="taskbar-item" data-target="win-shop">🛒</button>
+        <button class="taskbar-item" data-target="win-clear-logs" id="taskbar-clear-logs" style="display: none;">🧹</button>
+        <button class="taskbar-item" data-target="win-ghost" id="taskbar-ghost" style="display: none;">👁️</button>
+        <button class="taskbar-item" data-target="win-commlink">✉️</button>
+        <button class="taskbar-item" data-target="win-about">ℹ️</button>
+    </nav>
+
     <!-- Load scripts sequentially to avoid browser module CORS blocking on local files -->
     <script src="js/shop.js"></script>
     <script src="js/translations.js"></script>
