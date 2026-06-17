@@ -617,7 +617,7 @@ class UiManager {
         this.intrusionGrid.innerHTML = `
             <div class="brute-container" style="grid-column: span 4; width: 100%; height: 100px; position: relative; background: rgba(255,255,255,0.05); border: 1px solid var(--border-dim); overflow: hidden;">
                 <div id="brute-target" style="position: absolute; left: ${targetRange.min}%; width: ${targetRange.max - targetRange.min}%; height: 100%; background: rgba(0, 255, 102, 0.2); border-left: 1px solid var(--neon-green); border-right: 1px solid var(--neon-green);"></div>
-                <div id="brute-slider" style="position: absolute; left: 0%; width: 4px; height: 100%; background: var(--neon-magenta); box-shadow: 0 0 10px var(--neon-magenta); transition: left 0.1s linear;"></div>
+                <div id="brute-slider" style="position: absolute; left: 0%; width: 4px; height: 100%; background: var(--neon-magenta); box-shadow: 0 0 10px var(--neon-magenta); transition: none;"></div>
             </div>
             <button id="brute-action-btn" class="hack-btn" style="grid-column: span 4; margin-top: 20px; height: 50px;">
                 <span class="hack-btn-text">INJECT NOW</span>

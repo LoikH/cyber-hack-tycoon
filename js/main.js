@@ -424,7 +424,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- ABOUT & SUPPORT BUTTONS LISTENERS ---
     ui.supportBtn.addEventListener("click", () => {
-        window.open("https://loikh.itch.io/cyber-hack-tycoon", "_blank");
+        window.open("https://loikh.itch.io/cyber-hack-tycoon/donate", "_blank");
     });
 
     ui.aboutBtn.addEventListener("click", () => {
@@ -437,7 +437,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     ui.aboutDonateBtn.addEventListener("click", () => {
-        window.open("https://loikh.itch.io/cyber-hack-tycoon", "_blank");
+        window.open("https://loikh.itch.io/cyber-hack-tycoon/donate", "_blank");
     });
 
     ui.aboutResetBtn.addEventListener("click", () => {
@@ -568,6 +568,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const targetMin = Math.floor(Math.random() * (100 - targetSize));
             bruteTargetRange = { min: targetMin, max: targetMin + targetSize };
             ui.renderBrutePuzzle(bruteTargetRange, verifyBruteForce);
+            startBruteForceAnimation();
         }
 
         ui.intrusionTimerTxt.innerText = `Time remaining: ${gameTimer}s`;
@@ -605,6 +606,25 @@ document.addEventListener("DOMContentLoaded", () => {
             ui.screenFeedback.className = "feedback-overlay error-flash";
             setTimeout(() => { ui.screenFeedback.className = "feedback-overlay"; }, 300);
         }
+    }
+
+    function startBruteForceAnimation() {
+        function animate() {
+            if (!intrusionActive || intrusionType !== "brute") return;
+            
+            bruteCurrentPos += 2.2 * bruteDirection;
+            if (bruteCurrentPos >= 100) {
+                bruteCurrentPos = 100;
+                bruteDirection = -1;
+            } else if (bruteCurrentPos <= 0) {
+                bruteCurrentPos = 0;
+                bruteDirection = 1;
+            }
+            
+            ui.updateBruteSlider(bruteCurrentPos);
+            requestAnimationFrame(animate);
+        }
+        requestAnimationFrame(animate);
     }
 
     function handleIntrusionSuccess() {
@@ -851,13 +871,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // --- ACTIVE INTRUSION GAME COUNTDOWN ---
         if (intrusionActive) {
             gameTimer--;
-
-            if (intrusionType === "brute") {
-                // Brute Force slider logic
-                bruteCurrentPos += 5 * bruteDirection;
-                if (bruteCurrentPos >= 100 || bruteCurrentPos <= 0) bruteDirection *= -1;
-                ui.updateBruteSlider(bruteCurrentPos);
-            }
 
             if (gameTimer <= 0) {
                 gameTimer = 0;

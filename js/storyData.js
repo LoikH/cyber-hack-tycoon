@@ -395,7 +395,7 @@ const STORY_EVENTS = [
                     "[SOUTENIR LOIKH (ITCH.IO)]" :
                     "[SUPPORT LOIKH (DONATE)]",
                 action: (state) => {
-                    window.open("https://loikh.itch.io/cyber-hack-tycoon", "_blank");
+                    window.open("https://loikh.itch.io/cyber-hack-tycoon/donate", "_blank");
                     state.completedEvents.push("creator_msg");
                 }
             },

@@ -1352,5 +1352,22 @@ body {
     box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
 }
 
+/* Custom styled validation button for Brute Force mini-game */
+#brute-action-btn {
+    border-color: var(--neon-magenta) !important;
+    color: var(--neon-magenta) !important;
+    background: rgba(255, 0, 85, 0.05) !important;
+    box-shadow: inset 0 0 15px rgba(255, 0, 85, 0.1) !important;
+}
+#brute-action-btn:hover {
+    background: rgba(255, 0, 85, 0.18) !important;
+    box-shadow: 0 0 15px rgba(255, 0, 85, 0.35), inset 0 0 15px rgba(255, 0, 85, 0.1) !important;
+    border-color: var(--neon-magenta) !important;
+}
+#brute-action-btn:active {
+    transform: scale(0.97) !important;
+    background: rgba(255, 0, 85, 0.3) !important;
+}
+
 
 
