@@ -97,6 +97,7 @@ class AudioManager {
 
     // Helper to play a single note
     playNote(freq, delay, duration, type = 'square') {
+        if (!this.enabled || !this.ctx) return; // Check if audio is enabled!
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
 
